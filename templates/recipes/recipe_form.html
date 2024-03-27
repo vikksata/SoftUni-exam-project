@@ -1,0 +1,16 @@
+<!-- recipes/recipe_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if recipe %}Edit Recipe{% else %}Add Recipe{% endif %}</title>
+</head>
+<body>
+    <h1>{% if recipe %}Edit Recipe{% else %}Add Recipe{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

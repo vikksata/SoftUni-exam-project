@@ -1,16 +1,15 @@
 <!-- recipes/recipe_list.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Recipe List</title>
-</head>
-<body>
-    <h1>Recipe List</h1>
+{% extends "base.html" %}
+
+{% block title %}Recipe List{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    <h2>Recipe List</h2>
     <ul>
         {% for recipe in recipes %}
             <li><a href="{% url 'recipe_detail' recipe_id=recipe.id %}">{{ recipe.title }}</a></li>
         {% endfor %}
     </ul>
-</body>
-</html>
+    {% endif %}
+{% endblock %}

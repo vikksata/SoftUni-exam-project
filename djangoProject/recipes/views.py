@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -78,11 +79,17 @@ def delete_recipe(request, recipe_id):
 
 
 @login_required
-def UserProfileView(request):
+def user_profile_view(request):
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
         # If UserProfile does not exist, create a new one
         profile = UserProfile(user=request.user)
         profile.save()
-    return render(request, 'registration/profile.html', {'profile': profile})
+    return render(request, 'homepage/home_with_profile.html', {'profile': profile})
+
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a desired page after logout
+    return render(request, 'homepage/home_without_profile.html')

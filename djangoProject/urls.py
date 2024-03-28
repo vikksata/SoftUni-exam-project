@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from djangoProject.recipes.views import register, UserProfileView
+from djangoProject.recipes.views import register, user_profile_view, logout_view
 from homepage.views import HomeView
 
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # Include Django's default authentication URLs
     path('register/', register, name='register'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('accounts/profile/', UserProfileView, name='profile'),
+    path('accounts/profile/', user_profile_view, name='profile'),
     path('', HomeView.as_view(), name='home'),
+    path('logout/', logout_view, name='logout'),
 ]

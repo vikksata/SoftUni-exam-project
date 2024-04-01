@@ -14,5 +14,6 @@
     <p>Released: {{ recipe.created_at }}</p>
     <p>Updated: {{ recipe.updated_at }}</p>
     <a class="nav-link" href="{% url 'edit_recipe' recipe_id=recipe.id %}">Edit Recipe</a>
+    <a class="nav-link" href="{% url 'delete_recipe' recipe_id=recipe.id %}">Delete Recipe</a>
 </body>
 {% endblock %}

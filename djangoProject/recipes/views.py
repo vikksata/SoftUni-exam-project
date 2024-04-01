@@ -39,7 +39,7 @@ def add_recipe(request):
             return redirect('recipe_detail', recipe_id=recipe.id)
     else:
         form = RecipeForm()
-    return render(request, 'recipes/recipe_form.html', {'form': form})
+    return render(request, 'recipes/recipe_edit.html', {'form': form})
 
 
 @login_required
@@ -52,7 +52,7 @@ def edit_recipe(request, recipe_id):
             return redirect('recipe_detail', recipe_id=recipe.id)
     else:
         form = RecipeForm(instance=recipe)
-    return render(request, 'recipes/recipe_form.html', {'form': form, 'recipe': recipe})
+    return render(request, 'recipes/recipe_edit.html', {'form': form, 'recipe': recipe})
 
 
 @login_required

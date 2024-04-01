@@ -1,24 +1,10 @@
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
 
 from .models import Recipe, UserProfile
 from .forms import RecipeForm
 from .forms import RegistrationForm
-
-
-@login_required
-def create_recipe(request):
-    if request.method == 'POST':
-        form = RecipeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('recipe-list')  # Redirect to the list of recipes after successful creation
-    else:
-        form = RecipeForm()
-    return render(request, 'recipes/create_recipe.html', {'form': form})
 
 
 def register(request):

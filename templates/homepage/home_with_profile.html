@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}ima li profil{% endblock %}
+{% block title %}ima profil{% endblock %}
 
 {% block content %}
     {% if user.is_authenticated %}
@@ -10,5 +10,6 @@
             <li><a href="{% url 'recipe_detail' recipe_id=recipe.id %}">{{ recipe.title }}</a></li>
         {% endfor %}
     </ul>
+    <a class="nav-link" href="{% url 'add_recipe' %}">Add Recipe</a>
     {% endif %}
 {% endblock %}

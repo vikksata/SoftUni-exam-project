@@ -36,10 +36,10 @@ def add_recipe(request):
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
-            return redirect('recipe_detail', recipe_id=recipe.id)
+            return redirect('profile')
     else:
         form = RecipeForm()
-    return render(request, 'recipes/recipe_edit.html', {'form': form})
+    return render(request, 'recipes/recipe_add.html', {'form': form})
 
 
 @login_required

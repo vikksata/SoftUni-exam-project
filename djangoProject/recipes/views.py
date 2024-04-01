@@ -20,7 +20,7 @@ def register(request):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
-    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+    return render(request, 'homepage/home_with_profile.html', {'recipes': recipes})
 
 
 def recipe_detail(request, recipe_id):

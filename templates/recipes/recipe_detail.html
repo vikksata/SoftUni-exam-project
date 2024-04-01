@@ -1,6 +1,6 @@
 <!-- recipes/recipe_detail.html -->
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>{{ recipe.title }}</title>
@@ -12,4 +12,4 @@
     <p>Instructions: {{ recipe.instructions }}</p>
     <!-- Add more details as needed -->
 </body>
-</html>
+{% endblock %}

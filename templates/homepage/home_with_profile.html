@@ -4,19 +4,26 @@
 
 {% block content %}
     <div class="d-flex justify-content-center">
-        <div>
+    <div>
         {% if user.is_authenticated %}
-        <h2>Recipe List</h2>
-        {% if recipes %}
-        <ul>
-            {% for recipe in recipes %}
-                <li><a href="{% url 'recipe_detail' recipe_id=recipe.id %}">{{ recipe.title }}</a></li>
-            {% endfor %}
-        </ul>
-        {% else %}
-            <h3>No recipes</h3>
-        {% endif %}
-        <a class="nav-link" href="{% url 'add_recipe' %}">Add Recipe</a>
+            <h2 class="text-center">Recipe List</h2>
+            <hr>
+            {% if recipes %}
+                <div class="row">
+                {% for recipe in recipes %}
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{ recipe.title }}</h5>
+                            <img src="{{ recipe.image_url }}" width="200" height="200"/>
+                        </div>
+                        <a href="{% url 'recipe_detail' recipe_id=recipe.id %}" class="btn btn-primary">How to prepare</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <h3>No recipes</h3>
+            {% endif %}
         {% endif %}
         </div>
     </div>

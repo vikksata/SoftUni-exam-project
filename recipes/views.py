@@ -1,21 +1,33 @@
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Recipe, UserProfile
+from .models import Recipe, CustomUser
 from .forms import RecipeForm
 from .forms import RegistrationForm
 
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # Redirect to login page after successful registration
-    else:
-        form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form': form})
+            user = form.save()
+            user_type = form.cleaned_data.get('user_type')
+
+            # Create the group if it doesn't exist
+            group_name = user_type.capitalize() + 's'
+            group, created = Group.objects.get_or_create(name=group_name)
+
+            user.groups.add(group)  # Add the user to the chosen group
+            login(request, user)
+            return redirect("login")
+        else:
+            for msg in form.error_messages:
+                print(form.error_messages[msg])
+
+    form = RegistrationForm
+    return render(request=request, template_name="registration/register.html", context={"form": form})
 
 
 def recipe_list(request):
@@ -67,10 +79,10 @@ def delete_recipe(request, recipe_id):
 @login_required
 def user_profile_view(request):
     try:
-        profile = request.user.userprofile
-    except UserProfile.DoesNotExist:
+        profile = request.user.customuser
+    except CustomUser.DoesNotExist:
         # If UserProfile does not exist, create a new one
-        profile = UserProfile(user=request.user)
+        profile = CustomUser(user=request.user)
         profile.save()
     return render(request, 'homepage/home_with_profile.html', {'profile': profile})
 

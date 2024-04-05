@@ -3,28 +3,31 @@
 {% block title %}ima profil{% endblock %}
 
 {% block content %}
-    <div class="d-flex justify-content-center">
-    <div>
-        {% if user.is_authenticated %}
-            <h2 class="text-center">Recipe List</h2>
-            <hr>
-            {% if recipes %}
-                <div class="row">
-                {% for recipe in recipes %}
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">{{ recipe.title }}</h5>
-                            <img src="{{ recipe.image_url }}" width="200" height="200"/>
+    <body>
+    <h2 class="text-center">Recipe List</h2>
+    <hr>
+            {% if user.is_authenticated %}
+                {% if recipes %}
+                    <div class="row">
+                    {% for recipe in recipes %}
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ recipe.title }}</h5>
+                                    <img src="{{ recipe.image_url }}" width="200" height="200"/>
+                                    <hr>
+                                    <a href="{% url 'recipe_detail' recipe_id=recipe.id %}" class="btn btn-warning">How
+                                        to
+                                        prepare</a>
+                                </div>
+                            </div>
                         </div>
-                        <a href="{% url 'recipe_detail' recipe_id=recipe.id %}" class="btn btn-primary">How to prepare</a>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <h3>No recipes</h3>
+                    {% endfor %}
+                {% else %}
+                    <h3>No recipes</h3>
+                {% endif %}
             {% endif %}
-        {% endif %}
-        </div>
-    </div>
+
+
+    </body>
 {% endblock %}

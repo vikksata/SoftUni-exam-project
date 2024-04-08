@@ -12,10 +12,16 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'age', 'password1', 'password2', 'user_type')
+        fields = ('username', 'email', 'age', 'password1', 'password2', 'user_type')
 
 
 class RecipeForm(forms.ModelForm):
+    class Meta:
+        model = Recipe
+        fields = ['title', 'description', 'ingredients', 'instructions', 'image_url']
+
+
+class EditRecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ['title', 'description', 'ingredients', 'instructions', 'image_url']

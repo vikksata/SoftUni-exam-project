@@ -18,12 +18,6 @@
                     <p>Instructions: {{ recipe.instructions }}</p>
                     <p>Released: {{ recipe.created_at }}</p>
                     <p>Updated: {{ recipe.updated_at }}</p>
-                    {% if user.is_staff %}
-                        <a class="btn btn-warning" href="{% url 'edit_recipe' recipe_id=recipe.id %}">Edit
-                            Recipe</a>
-                        <a class="btn btn-danger" href="{% url 'delete_recipe' recipe_id=recipe.id %}">Delete
-                            Recipe</a>
-                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}ima profil{% endblock %}
+
+{% block content %}
+    <body>
+    <h2 class="text-center">Recipe List</h2>
+    <hr>
+    {% if user.is_authenticated %}
+        {% if recipes %}
+            <div class="row">
+                {% for recipe in recipes %}
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h1>{{ recipe.title }}</h1>
+                    <h4>Author: {{ recipe.author }}</h4>
+                    <img src="{{ recipe.image_url }}" alt="img" width="200" height="200"/>
+                    <p>Description: {{ recipe.description }}</p>
+                    <p>Ingredients: {{ recipe.ingredients }}</p>
+                    <p>Instructions: {{ recipe.instructions }}</p>
+                    <p>Released: {{ recipe.created_at }}</p>
+                    <p>Updated: {{ recipe.updated_at }}</p>
+                        <a class="btn btn-warning" href="{% url 'edit_recipe' recipe_id=recipe.id %}">Edit
+                            Recipe</a>
+                        <a class="btn btn-danger" href="{% url 'delete_recipe' recipe_id=recipe.id %}">Delete
+                            Recipe</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                {% endfor %}
+        {% else %}
+            <h3>No recipes</h3>
+        {% endif %}
+    {% endif %}
+    </body>
+{% endblock %}

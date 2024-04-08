@@ -1,10 +1,12 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, TemplateView
 
 from .models import Recipe, CustomUser
-from .forms import RecipeForm
+from .forms import RecipeForm, EditRecipeForm
 from .forms import RegistrationForm
 
 
@@ -58,12 +60,12 @@ def add_recipe(request):
 def edit_recipe(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
     if request.method == 'POST':
-        form = RecipeForm(request.POST, instance=recipe)
+        form = EditRecipeForm(request.POST, instance=recipe)
         if form.is_valid():
             form.save()
             return redirect('recipe_detail', recipe_id=recipe.id)
     else:
-        form = RecipeForm(instance=recipe)
+        form = EditRecipeForm(instance=recipe)
     return render(request, 'recipes/recipe_edit.html', {'form': form, 'recipe': recipe})
 
 
@@ -91,3 +93,16 @@ def logout_view(request):
     logout(request)
     # Redirect to a desired page after logout
     return render(request, 'homepage/home_without_profile.html')
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'registration/profile.html'
+
+
+class MyRecipesView(LoginRequiredMixin, ListView):
+    model = Recipe
+    template_name = 'recipes/my_recipes.html'
+    context_object_name = 'recipes'
+
+    def get_queryset(self):
+        return Recipe.objects.filter(author=self.request.user)

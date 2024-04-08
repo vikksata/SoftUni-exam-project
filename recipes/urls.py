@@ -1,10 +1,10 @@
 from django.urls import path
 from . import views
-from .views import MyRecipesView, ProfileView
+from .views import MyRecipesView, ProfileView, RecipeListView, RecipeDetailView
 
 urlpatterns = [
-    path('accounts/profile/', views.recipe_list, name='recipe_list'),
-    path('recipe/<int:recipe_id>/', views.recipe_detail, name='recipe_detail'),
+    path('accounts/profile/', RecipeListView.as_view(), name='recipe_list'),
+    path('recipe/<int:pk>/', RecipeDetailView.as_view(), name='recipe_detail'),
     path('recipe/add/', views.add_recipe, name='add_recipe'),
     path('recipe/<int:recipe_id>/edit/', views.edit_recipe, name='edit_recipe'),
     path('recipe/<int:recipe_id>/delete/', views.delete_recipe, name='delete_recipe'),

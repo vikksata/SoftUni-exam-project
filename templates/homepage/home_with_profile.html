@@ -16,7 +16,7 @@
                                 <h5 class="card-title">{{ recipe.title }}</h5>
                                 <img src="{{ recipe.image_url }}" width="200" height="200"/>
                                 <hr>
-                                <a href="{% url 'recipe_detail' recipe_id=recipe.id %}" class="btn btn-warning">How
+                                <a href="{% url 'recipe_detail' pk=recipe.pk %}" class="btn btn-warning">How
                                     to
                                     prepare</a>
                             </div>

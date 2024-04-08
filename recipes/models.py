@@ -22,6 +22,24 @@ class CustomUser(AbstractUser):
             self.groups.set([Group.objects.get(name='Viewer')])
 
 
+class RecipeCategory(models.Model):
+    MAIN_STARTER = 'main_starter'
+    MAIN_COURSE = 'main_course'
+    DESSERT = 'dessert'
+
+    CATEGORY_CHOICES = [
+        (MAIN_STARTER, 'Main Starter'),
+        (MAIN_COURSE, 'Main Course'),
+        (DESSERT, 'Dessert'),
+    ]
+
+    name = models.CharField(max_length=100, choices=CATEGORY_CHOICES, unique=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.get_name_display()
+
+
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -29,25 +47,12 @@ class Recipe(models.Model):
     ingredients = models.TextField()
     instructions = models.TextField()
     image_url = models.URLField(null=False, blank=False, verbose_name="Image URL:", default='default_url')
+    categories = models.ManyToManyField(RecipeCategory, related_name='recipes')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
 
 
 class Comment(models.Model):

@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -67,7 +67,7 @@ def add_recipe(request):
 
 @login_required
 def edit_recipe(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id, author=request.user)
     if request.method == 'POST':
         form = EditRecipeForm(request.POST, instance=recipe)
         if form.is_valid():
@@ -80,7 +80,7 @@ def edit_recipe(request, recipe_id):
 
 @login_required
 def delete_recipe(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id, author=request.user)
     if request.method == 'POST':
         recipe.delete()
         return redirect('recipe_list')
@@ -131,10 +131,20 @@ def add_favourite(request, recipe_id):
     return redirect('home')
 
 
-@login_required
-def user_favourites(request, user_id):
-    favorites = Favorite.objects.filter(user__id=user_id)
-    return render(request, 'recipes/user_favourites.html', {'favorites': favorites})
+class UserFavoritesView(LoginRequiredMixin, DetailView):
+    template_name = 'recipes/user_favourites.html'
+    context_object_name = 'favorites'
+
+    def get_object(self, queryset=None):
+        user_id = self.kwargs['user_id']
+        if self.request.user.id != int(user_id):
+            raise Http404("You are not allowed to view this page.")
+        return get_object_or_404(CustomUser, pk=user_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['favorites'] = Favorite.objects.filter(user__id=self.get_object().id)
+        return context
 
 
 class FavoritesRecipeDetailView(DetailView):

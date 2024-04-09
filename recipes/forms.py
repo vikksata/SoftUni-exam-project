@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser, Recipe
+from .models import CustomUser, Recipe, Comment
 
 
 class RegistrationForm(UserCreationForm):
@@ -36,3 +36,12 @@ class CustomUserChangeForm(UserChangeForm):
         super().__init__(*args, **kwargs)
         if self.instance.user_type == 'chef':
             self.fields['user_type'].disabled = True
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'placeholder': 'Enter your comment here...'})
+        }

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Recipe Comments</title>
+    </head>
+    <body>
+    <h1>Comments for {{ recipe.title }}</h1>
+    <ul>
+        {% for comment in recipe_comments %}
+            <div class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">Author: {{ comment.author.username }}</div>
+                <div class="card-body">
+                    <h5 class="card-text">Comment: {{ comment.content }}</h5>
+                    <p class="card-title">Date: {{ comment.created_at }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <li>No comments yet.</li>
+        {% endfor %}
+    </ul>
+    </body>
+{% endblock %}

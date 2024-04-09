@@ -1,13 +1,13 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, TemplateView, DetailView
 
-from .models import Recipe, CustomUser, Favorite
-from .forms import RecipeForm, EditRecipeForm, CustomUserChangeForm
+from .models import Recipe, CustomUser, Favorite, Comment
+from .forms import RecipeForm, EditRecipeForm, CustomUserChangeForm, CommentForm
 from .forms import RegistrationForm
 
 
@@ -47,6 +47,9 @@ class RecipeDetailView(DetailView):
 
 @login_required
 def add_recipe(request):
+    if not request.user.groups.filter(name='Chef').exists():
+        return HttpResponseForbidden("You are not allowed to perform this action.")
+
     if request.method == 'POST':
         form = RecipeForm(request.POST)
         if form.is_valid():
@@ -146,3 +149,28 @@ def edit_profile(request):
     else:
         form = CustomUserChangeForm(instance=request.user)
     return render(request, 'registration/edit_profile.html', {'form': form})
+
+
+@login_required
+def add_comment(request, recipe_id):
+    recipe = Recipe.objects.get(id=recipe_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.recipe = recipe  # Associate comment with the recipe
+            comment.author = request.user  # Set the comment's author to the current user
+            comment.save()
+            return redirect('recipe_detail', pk=recipe_id)  # Redirect to recipe detail page
+    else:
+        form = CommentForm()
+
+    return render(request, 'recipes/add_comment.html', {'form': form})
+
+
+def view_recipe_comments(request, recipe_id):
+    recipe_comments = Comment.objects.filter(recipe_id=recipe_id)
+    recipe = Recipe.objects.get(id=recipe_id)
+
+    return render(request, 'recipes/view_recipe_comments.html', {'recipe_comments': recipe_comments, 'recipe': recipe})

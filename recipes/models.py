@@ -23,21 +23,21 @@ class CustomUser(AbstractUser):
 
 
 class RecipeCategory(models.Model):
-    MAIN_STARTER = 'main_starter'
+    STARTER = 'starter'
     MAIN_COURSE = 'main_course'
     DESSERT = 'dessert'
 
     CATEGORY_CHOICES = [
-        (MAIN_STARTER, 'Main Starter'),
+        (STARTER, 'Starter'),
         (MAIN_COURSE, 'Main Course'),
         (DESSERT, 'Dessert'),
     ]
 
-    name = models.CharField(max_length=100, choices=CATEGORY_CHOICES, unique=True)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, unique=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return self.get_name_display()
+        return self.get_category_display()
 
 
 class Recipe(models.Model):

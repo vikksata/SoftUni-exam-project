@@ -4,9 +4,11 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView, TemplateView, DetailView
 
-from .models import Recipe, CustomUser, Favorite, Comment
+from .models import Recipe, CustomUser, Favorite, Comment, RecipeCategory
 from .forms import RecipeForm, EditRecipeForm, CustomUserChangeForm, CommentForm
 from .forms import RegistrationForm
 
@@ -56,6 +58,7 @@ def add_recipe(request):
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
+            form.save_m2m()
             return redirect('recipe_list')
     else:
         form = RecipeForm()
@@ -140,6 +143,21 @@ class FavoritesRecipeDetailView(DetailView):
 
 
 @login_required
+def delete_favourite(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+
+    # Check if the favourite exists
+    favourite = Favorite.objects.filter(user=request.user, recipe=recipe)
+    if favourite.exists():
+        # If the favourite exists, delete it
+        favourite.delete()
+        return redirect(reverse('user_favourites', args=[request.user.id]))
+    else:
+        # If the favourite does not exist, inform the user
+        return HttpResponse("This apartment is not in your favourites.")
+
+
+@login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, instance=request.user)
@@ -174,3 +192,27 @@ def view_recipe_comments(request, recipe_id):
     recipe = Recipe.objects.get(id=recipe_id)
 
     return render(request, 'recipes/view_recipe_comments.html', {'recipe_comments': recipe_comments, 'recipe': recipe})
+
+
+class StarterRecipesView(View):
+
+    def get(self, request, *args, **kwargs):
+        starter_category = RecipeCategory.objects.get(category=RecipeCategory.STARTER)
+        recipes = Recipe.objects.filter(categories=starter_category)
+        return render(request, 'recipes/recipe_categories.html', {'recipes': recipes})
+
+
+class MainCourseRecipesView(View):
+
+    def get(self, request, *args, **kwargs):
+        main_course_category = RecipeCategory.objects.get(category=RecipeCategory.MAIN_COURSE)
+        recipes = Recipe.objects.filter(categories=main_course_category)
+        return render(request, 'recipes/recipe_categories.html', {'recipes': recipes})
+
+
+class DessertRecipesView(View):
+
+    def get(self, request, *args, **kwargs):
+        dessert_category = RecipeCategory.objects.get(category=RecipeCategory.DESSERT)
+        recipes = Recipe.objects.filter(categories=dessert_category)
+        return render(request, 'recipes/recipe_categories.html', {'recipes': recipes})

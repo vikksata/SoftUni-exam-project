@@ -5,7 +5,7 @@
     <form method="post" class="form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Apply changes</button>
+        <button type="submit" class="btn btn-outline-warning">Apply changes</button>
     </form>
     </body>
 {% endblock %}

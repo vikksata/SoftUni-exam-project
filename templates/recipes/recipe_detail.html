@@ -13,14 +13,15 @@
                     <h1>{{ recipe.title }}</h1>
                     <h4>Author: {{ recipe.author }}</h4>
                     <img src="{{ recipe.image_url }}" alt="img" width="200" height="200"/>
+                    <p>Categories: {{ recipe.categories.first }}</p>
                     <p>Description: {{ recipe.description }}</p>
                     <p>Ingredients: {{ recipe.ingredients }}</p>
                     <p>Instructions: {{ recipe.instructions }}</p>
                     <p>Released: {{ recipe.created_at }}</p>
                     <p>Updated: {{ recipe.updated_at }}</p>
-                    <a href="{% url 'add_favourite' recipe.id %}" class="btn btn-info">Add to Favorites</a>
-                    <a href="{% url 'add_comment' recipe.id %}" class="btn btn-warning">Add Comment</a>
-                    <a href="{% url 'view_recipe_comments' recipe.id %}" class="btn btn-info">View Comments</a>
+                    <a href="{% url 'add_favourite' recipe.id %}" class="btn btn-outline-info">Add to Favorites</a>
+                    <a href="{% url 'add_comment' recipe.id %}" class="btn btn-outline-warning">Add Comment</a>
+                    <a href="{% url 'view_recipe_comments' recipe.id %}" class="btn btn-outline-info">View Comments</a>
                 </div>
             </div>
         </div>

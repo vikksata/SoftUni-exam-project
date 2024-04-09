@@ -16,15 +16,17 @@ class RegistrationForm(UserCreationForm):
 
 
 class RecipeForm(forms.ModelForm):
+
     class Meta:
         model = Recipe
-        fields = ['title', 'description', 'ingredients', 'instructions', 'image_url']
+        fields = ['title', 'categories', 'description', 'ingredients', 'instructions', 'image_url']
 
 
 class EditRecipeForm(forms.ModelForm):
+
     class Meta:
         model = Recipe
-        fields = ['title', 'description', 'ingredients', 'instructions', 'image_url']
+        fields = ['title', 'categories', 'description', 'ingredients', 'instructions', 'image_url']
 
 
 class CustomUserChangeForm(UserChangeForm):

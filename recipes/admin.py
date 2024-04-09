@@ -10,10 +10,10 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 
 class RecipeCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-    ordering = ('name',)
-    list_filter = ('name',)
+    list_display = ('category',)
+    search_fields = ('category',)
+    ordering = ('category',)
+    list_filter = ('category',)
 
 
 class RecipeAdmin(admin.ModelAdmin):

@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import MyRecipesView, ProfileView, RecipeListView, RecipeDetailView, add_favourite, user_favourites, \
-    FavoritesRecipeDetailView
+    FavoritesRecipeDetailView, edit_profile
 
 urlpatterns = [
     path('accounts/profile/', RecipeListView.as_view(), name='recipe_list'),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('recipe/<int:recipe_id>/add_favourite/', add_favourite, name='add_favourite'),
     path('user/<int:user_id>/favourites/', user_favourites, name='user_favourites'),
     path('favorites/recipe/<int:pk>/', FavoritesRecipeDetailView.as_view(), name='favorite_recipe_details'),
+    path('edit_profile/', edit_profile, name='edit_profile'),
 ]

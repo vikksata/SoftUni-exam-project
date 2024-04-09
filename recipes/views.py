@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, TemplateView, DetailView
 
 from .models import Recipe, CustomUser, Favorite
-from .forms import RecipeForm, EditRecipeForm
+from .forms import RecipeForm, EditRecipeForm, CustomUserChangeForm
 from .forms import RegistrationForm
 
 
@@ -134,3 +134,15 @@ def user_favourites(request, user_id):
 class FavoritesRecipeDetailView(DetailView):
     model = Recipe
     template_name = 'recipes/favorite_recipe_details.html'
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('my_profile')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+    return render(request, 'registration/edit_profile.html', {'form': form})

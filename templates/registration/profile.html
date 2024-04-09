@@ -10,5 +10,6 @@
     <p>Email: {{ user.email }}</p>
     <p>Age: {{ user.age }}</p>
     <p>User Type: {{ user.user_type }}</p>
+    <a href="{% url 'edit_profile' %}" class="btn btn-warning">Edit profile</a>
 </body>
 {% endblock %}
